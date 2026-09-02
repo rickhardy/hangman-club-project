@@ -3,15 +3,13 @@ from hangman_code.word_selection import (choose_word,
                                          parse_words)
 #from hangman_code.functions_for_play_game.data_handling import from_dict
 from hangman_code.functions_for_play_game.data_handling import to_dict
-
+'''
 def load_game(player_name):
     # Perstistance is checked
     # If an object exists with game_status 2 AND player name matches, 
     # return that object
     # If such an object does not exist, return a new game object
-   game = Game(player_name = player_name, 
-               game_status = Game.Game_status.NEW_GAME)
-   print(game.game_status)
+   game = Game('TEST')
    return game
 
 
@@ -52,4 +50,4 @@ def save_available_words(words):
     initialised properly
     return game_object """
 
-
+'''

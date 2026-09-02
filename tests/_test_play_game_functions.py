@@ -25,6 +25,7 @@ def factory_data():
 
     return create_game
 
+'''
 def test_play_game_returns_a_Game_object(factory_data):
     data = factory_data()
     letter = "E"
@@ -135,3 +136,5 @@ def test_play_game_finishes_if_game_is_lost(mocker, factory_data):
         letter = "F"
         result = play_game(data, letter)
         assert result == {"result": "lost"}
+
+'''

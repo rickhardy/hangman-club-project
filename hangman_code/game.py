@@ -5,11 +5,7 @@ from enum import IntEnum
 
 class Game:
 
-        class Game_choice(IntEnum): 
-                NEW_GAME = 1
-                EXIT_GAME = 4
-
-        class Game_status(IntEnum): # RP: I have made a note of this 
+        class Game_status(IntEnum):  
         # in game_status_function
                 NEW_GAME = 0
                 IN_PLAY = 1
@@ -18,136 +14,88 @@ class Game:
 
         def __init__(
                 self,
-                word: list[str] | None = None,
-                game_id: int | None = None,
-                current_score: int = 0,
-                player_name: str | None = "Enter_name",
-                template = "index.html",
-                message: str = "initial message",
+                word: str,
                 used_letters: list[str] | None = None,
-                game_status: Game_status| None = None,
+                letters_remaining: list[str] | None = None, 
                 accepted_letters: list[str] | None = None,
-                attempts_remaining: int = 10,
-                word_progress: list[str] | None = None,
+                status: Game_status | None = None,
                     ) -> None:
         
-                self.word = [""] if word is None else word
-                self.game_id = id(self) if game_id is None else game_id
-                self.current_score = current_score
-                self.player_name = player_name
-                self.template = template
-                self.message = message
-                self.used_letters = [] if used_letters is None else used_letters
-                if game_status is None:
-                        self.set_game_status(self.Game_status.NEW_GAME)
-                else: 
-                        self.game_status = game_status
-                self.accepted_letters = [] if accepted_letters is None else accepted_letters
-                self.attempts_remaining = attempts_remaining
-                self.word_progress = [""] if word_progress is None else word_progress
+                self.word = self.set_word (word)
+                self.accepted_letters = self.set_accepted_letters(accepted_letters)
+                self.used_letters = self.set_used_letters(used_letters)
+                self.letters_remaining = self.set_letters_remaining(letters_remaining)
+                self.status = self.set_status(status)
+
+
+
 
 # FOR EVERY SINGLE ATTRIBUTE, THERE IS A GET AND A SET
 
         def get_word(self):
                 return self.word
         
-        def set_word(self,chosen_word):
+        def set_word(self,word):
                 # This function takes an input of a list and returns a list
-                if isinstance(chosen_word, list):
-                        self.word = chosen_word
-                        return self.word
+                if word.isalpha():
+                        return (word)
                 else:
-                        raise TypeError
-
-        def get_game_id(self):
-                return self.game_id
-
-        def set_game_id(self, new_id):
-                if isinstance(new_id, int):
-                        self.game_id = new_id
-                        return self.game_id
-                else:
-                        raise TypeError
-        
-        def get_current_score(self):
-                return self.current_score
-
-        def set_current_score(self,current_score):
-                if isinstance(current_score, int):
-                        self.current_score = current_score
-                        return self.current_score
-                else:
-                        raise TypeError
+                        raise TypeError (f"Non alphabetic characters in word: {self.accepted_letters}")
                 
-        def get_player_name(self):
-                return self.player_name
-        
-        def set_player_name(self, player_name):
-                swearlist = ["fuck", "wank", "shit", "cunt"]
-                if isinstance(player_name, str):
-                        if any ([x in player_name for x in swearlist]):
-                                raise ValueError()
-                        self.player_name = player_name
-                        return self.player_name.strip().capitalize()                
-                else:
-                        raise TypeError
-
-        def get_template(self):
-                return self.template
-        
-        def set_template(self, template_name):
-                if isinstance(template_name, str):
-                        if ".html" in template_name:
-                                self.template = template_name
-                                return self.template.strip()
-                        else:
-                                self.template = template_name.__add__(".html")
-                                return self.template.strip() 
-                else:
-                        raise TypeError
  
-        def get_message(self):
-                return self.message
-
-        def set_message(self,message):
-                if isinstance(message, str):
-                        self.message = message
-                        return self.message.strip().capitalize()
-                else:
-                        raise TypeError
-
-        def get_used_letters(self):
-                return self.used_letters       
+        def get_used_letters(self, used_letters):
+                if used_letters == None:
+                        used_letters = [] 
+                else: 
+                        used_letters = used_letters
+                return used_letters       
         
-        def set_used_letters(self,letter):
-                if isinstance(letter, str):
-                        self.used_letters.append(letter.strip()
-                                                 .capitalize()[:1])
-                        return self.used_letters
-                else:
-                        raise TypeError
+        def set_used_letters(self,used_letters):
+                        used_letters = [] if used_letters is None else used_letters
+                        return used_letters
+
         
-        def get_game_status(self):
-                return self.game_status
+        def get_status(self):
+                return self.status
                 
-        def set_game_status(self, game_status):
-                try:
-                        self.game_status = Game.Game_status(game_status)
-                        return self.game_status
-                except ValueError:
-                    raise TypeError(f"{game_status!r} is not a valid Game_status")
-        
-        def get_accepted_letters(self):
-                return self.accepted_letters
+        def set_status(self, status):
 
-        def set_accepted_letters(self,letter):
-                if isinstance(letter, str):
-                        self.accepted_letters.append(letter.strip()
-                                                 .capitalize()[:1])
-                        return self.accepted_letters
+                if status == None:  
+                        status = self.Game_status.NEW_GAME
+                elif isinstance(status, self.Game_status):
+                        if self.calculate_unsucessful_attempts() > 10:
+                                self.status = self.Game_status.LOST
+                        elif self.is_word_guessed():
+                                self.status = self.Game_status.WON
+                        else:
+                                # self.status = status # No change
+                                None # so no action
                 else:
-                        raise TypeError
+                        raise TypeError(f"{status!r} is not a valid Game_status")
+
+                return status
         
+        def is_word_guessed():
+                return False
+
+        def set_accepted_letters(self,accepted_letters):
+                        accepted_letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" if accepted_letters is None else accepted_letters
+                        
+                        if accepted_letters.isalpha():
+                                return (accepted_letters)
+                        else:
+                                raise TypeError (f"Non alphabetic characters in word: {accepted_letters}")
+
+                        
+        def set_letters_remaining(self,letters_remaining):
+                        letters_remaining = self.accepted_letters if letters_remaining is None else letters_remaining
+                        return letters_remaining
+
+        def get_letters_remaining(self):
+                return self.letters_remaining
+
+
+                        
         def get_attempts_remaining(self):
                 return self.attempts_remaining
 
@@ -161,24 +109,42 @@ class Game:
                 else:
                         raise TypeError
 
-        def get_word_progress(self):
-                return self.word_progress
-        
-        def set_word_progress(self,word_progress):
-                # This function takes an input of a list and returns a list
-                if isinstance(word_progress, list):
-                        word_progress_list = []
-                        for character in word_progress:
-                                if isinstance(character,int):
-                                        raise TypeError
-                                if len(character) > 1:
-                                        raise TypeError
-                                word_progress_list.append(character.strip()
-                                                          .capitalize())
-                        self.word_progress = word_progress_list
-                        return self.word_progress
+        def make_guess (self, letter):
+                print ('calculating guess')
+                self.used_letters.append(letter)
+                if letter in self.word:
+                        print ('yes') 
+
                 else:
-                        raise TypeError
+                        print ('no')
+                        
+                self.set_status        
+                self.calculate_display_option ()
+
+
+        def calculate_unsucessful_attempts(self):
+                unsuccessful_attempts = 0
+                for used_letter in self.used_letters:
+                        if used_letter not in self.word:
+                                unsuccessful_attempts += 1 
+                return unsuccessful_attempts      
+
+        def calculate_display_option (self):
+                display_option = (1 << self.calculate_unsucessful_attempts()) - 1  
+                return display_option
+
+        def calculate_word_template():
+                None
+
+        def to_dict(self):
+                return {
+                        "word": self.word,
+                        "used_letters": self.used_letters,
+                        "letters_remaining": self.letters_remaining,
+                        "display_option": self.calculate_display_option(),
+                        "status": self.status.name,
+                        "accepted_letters": self.accepted_letters
+                }
 
 
 

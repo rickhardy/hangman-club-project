@@ -27,9 +27,11 @@
     </form>
 
     <p id="message">this is where message goes on the screen:  {{ game["message"] }}</p>
-    <p id="template">TEMPLATE: {{ game["template"] }}</p>
-    <p id="game_status">GAME STATUS: {{ game["current_game_status"] }}</p>
-    <p id="score">SCORE: {{ game["score"] }}</p>
+    <p id="template">Accepted letters: {{ game["accepted_letters"] }}</p>
+    <p id="template">used letters: {{ game["used_letters"] }}</p>
+    
+    <p id="game_status">GAME STATUS: {{ game["status"] }}</p>
+    <p id="score">Word: {{ game["word"] }}</p>
     <p>GUESS THE WORD</p>
           <form action="{{ url_for('guess') }}" method="post">
           <p><input type="text" name="guess_the_word" /></p>
@@ -39,8 +41,8 @@
    <p>
      <!-- One form/button per letter -->
 <form action="{{ url_for('guess') }}" method="post">
-  {% for letter in alphabet %}
-<button name="letter" value="{{ letter }}" {% if letter in game["used_letters"] %}disabled{% endif %}>
+  {% for letter in game.accepted_letters %}
+<button name="letter" value="{{ letter }}" {% if letter in game["game.used_letters"] %}disabled{% endif %}>
     {{ letter }}
 </button>
   {% endfor %}
@@ -51,24 +53,26 @@
     <canvas id="gallows" width="400" height="400" style="border:1px solid grey"></canvas>
 
   {% endif %}
-<p id="lineLength" hidden>{{ game["line_length"] }}</p>
+
+<p id="displayOption" hidden>{{ game["display_option"] }}</p>
 
     <script>
-      const lineLength = parseInt(
-    document.getElementById("lineLength").textContent,
+      const displayOption = parseInt(
+    document.getElementById("displayOption").textContent,
     10
   );
+
   function hasBit(n, mask) {
     return (n & mask) !== 0;
 }
-      console.log("lineLength =", lineLength);
+  console.log("displayOption =", displayOption);
 
   const c = document.getElementById("gallows");
   const ctx = c.getContext("2d");
 
   // Only draw this line if bit 0 (1) is set
 // Only draw this line if bit 0 (1) is set
-  if (hasBit(lineLength, 1)) {
+  if (hasBit(displayOption, 1)) {
     ctx.beginPath();
     ctx.moveTo(0, 200);
     ctx.lineTo(50, 200);
@@ -76,7 +80,7 @@
   }
 
   // Only draw this line if bit 1 (2) is set
-  if (hasBit(lineLength, 2)) {
+  if (hasBit(displayOption, 2)) {
     ctx.beginPath();
     ctx.moveTo(25, 200);
     ctx.lineTo(25, 0);
@@ -85,23 +89,18 @@
 
   // Only draw this line if bit 2 (3) is set
   
-  if (hasBit(lineLength, 3)) {
+  if (hasBit(displayOption, 4)) {
     ctx.beginPath();
     ctx.moveTo(25, 0);
     ctx.lineTo(200, 0);
     ctx.stroke();
   }
-</script>
 
-
-
-  </body>
-</html>
   
 
    // Only draw this line if bit 3 (4) is set
   
-  if (hasBit(lineLength, 4)) {
+  if (hasBit(displayOption, 8)) {
     ctx.beginPath();
     ctx.moveTo(25, 25);
     ctx.lineTo(50, 0);
@@ -110,7 +109,7 @@
 
     // Only draw this line if bit 4 (5) is set
   
-  if (hasBit(lineLength, 5)) {
+  if (hasBit(displayOption, 16)) {
     ctx.beginPath();
     ctx.moveTo(150, 0);
     ctx.lineTo(150, 25);
@@ -119,7 +118,7 @@
 
  // Only draw this line if bit 5 (6) is set
   
-  if (hasBit(lineLength, 6)) {
+  if (hasBit(displayOption, 32)) {
     ctx.beginPath();
     ctx.arc(150, 37.5,12.5,0,Math.PI*2);
        ctx.fill();
@@ -127,7 +126,7 @@
 
    // Only draw this line if bit 6 (7) is set
   
-  if (hasBit(lineLength, 7)) {
+  if (hasBit(displayOption, 64)) {
     ctx.beginPath();
      ctx.moveTo(150, 50);
     ctx.lineTo(150, 100);
@@ -137,7 +136,7 @@
 //These lines below this point will need numbers adjusted to be 8 & 9
      // Only draw this line if bit 6 (7) is set
   
-  if (hasBit(lineLength, 7)) {
+  if (hasBit(displayOption, 128)) {
     ctx.beginPath();
      ctx.moveTo(150, 100);
     ctx.lineTo(125, 125);
@@ -151,7 +150,7 @@
 
   // Only draw this line if bit 6 (7) is set
   
-  if (hasBit(lineLength, 7)) {
+  if (hasBit(displayOption, 256)) {
     ctx.beginPath();
      ctx.moveTo(125, 75);
     ctx.lineTo(175, 75);

@@ -1,3 +1,4 @@
+
 from hangman_code.functions_for_play_game.game_status_function import (
     current_game_status,
     is_won,
@@ -18,6 +19,7 @@ from hangman_code.game import (
 
 )
 
+'''
 def play_game(game, letter: str):
         #-----------print type of game ---------------
         print(type(game))
@@ -77,4 +79,4 @@ def play_game(game, letter: str):
                 result = is_lost(game)
                 return result
                 #offer a new game to player
-
+'''

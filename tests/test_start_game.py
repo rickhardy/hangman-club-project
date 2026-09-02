@@ -45,7 +45,7 @@ def factory_words():
         ]
     return create_available_words_list
 
-def test_load_game_returns_a_game_object (factory_words):
+def _test_load_game_returns_a_game_object (factory_words):
     #given a player name
     words_list = factory_words()
     player_name = "fred"
@@ -53,12 +53,12 @@ def test_load_game_returns_a_game_object (factory_words):
     assert result is not None
     assert type(result) is Game
 
-def test_load_game_returns_expected_game_attribute ():
+def _test_load_game_returns_expected_game_attribute ():
     player_name = "Fred"
     result = load_game(player_name)
     assert "Fred" == result.player_name
 
-def test_load_game_returns_game_status ():
+def _test_load_game_returns_game_status ():
 # Check for any game status' which are IN_PLAY(1)
     player_name = "Fred"
     result = load_game(player_name)
@@ -67,7 +67,7 @@ def test_load_game_returns_game_status ():
                                   Game.Game_status.WON,
                                   Game.Game_status.LOST]
 
-def test_load_game_searches_game_status_in_persistance (factory_data, mocker):
+def _test_load_game_searches_game_status_in_persistance (factory_data, mocker):
 # Check for any game status' which are IN_PLAY(1)
     player_name = "Fred"
     persistence = factory_data()
@@ -87,7 +87,7 @@ def test_load_game_searches_game_status_in_persistance (factory_data, mocker):
                                   Game.Game_status.LOST]
     print(Game.Game_status)
 
-def test_new_game_returns_a_game_object (factory_words):
+def _test_new_game_returns_a_game_object (factory_words):
     #given a player name
     player_name = "fred"
     words_list = factory_words()
@@ -95,7 +95,7 @@ def test_new_game_returns_a_game_object (factory_words):
     assert result is not None
     assert type(result) is Game
 
-def test_new_game_gets_a_new_word_mock_word_selection (mocker,factory_words):
+def _test_new_game_gets_a_new_word_mock_word_selection (mocker,factory_words):
     words_list = factory_words()
     virgin_game = Game()
     mocker.patch(
@@ -110,7 +110,7 @@ def test_new_game_gets_a_new_word_mock_word_selection (mocker,factory_words):
     result= new_game(player_name,words_list)
     assert result.word is not previous_word
 
-def test_new_game_gets_a_new_word_real_word_selection (factory_words):
+def _test_new_game_gets_a_new_word_real_word_selection (factory_words):
     words_list = factory_words()
     virgin_game = Game()
     previous_word = virgin_game.get_word()
@@ -118,7 +118,7 @@ def test_new_game_gets_a_new_word_real_word_selection (factory_words):
     result= new_game(player_name,words_list)
     assert result.word is not previous_word
 
-def test_new_game_recieves_empty_word_list_and_still_works():
+def _test_new_game_recieves_empty_word_list_and_still_works():
     words_list = []
     virgin_game = Game()
     previous_word = virgin_game.get_word()
@@ -126,7 +126,7 @@ def test_new_game_recieves_empty_word_list_and_still_works():
     result= new_game(player_name,words_list)
     assert result.word is not previous_word
 
-def test_new_game_saves_updated_word_list(mocker):
+def _test_new_game_saves_updated_word_list(mocker):
 
     mocker.patch(
         "hangman_code.start_game.choose_word",
@@ -146,7 +146,7 @@ def test_new_game_saves_updated_word_list(mocker):
         ["banana", "orange"]
     )
 
-def test_new_game_when_choose_word_fails_should_get_error(mocker,
+def _test_new_game_when_choose_word_fails_should_get_error(mocker,
                                                           factory_words):
     words_list = factory_words()
     mocker.patch(
@@ -157,7 +157,7 @@ def test_new_game_when_choose_word_fails_should_get_error(mocker,
     with pytest.raises(ValueError):
         new_game(player_name,words_list)
 
-def test_save_available_words_calls_to_dict(mocker):
+def _test_save_available_words_calls_to_dict(mocker):
 
     words = ["apple", "banana", "orange"]
 
@@ -172,7 +172,7 @@ def test_save_available_words_calls_to_dict(mocker):
         "available_words_list.json"
     )
 
-def test_new_game_save_fails(mocker):
+def _test_new_game_save_fails(mocker):
 
     mocker.patch(
         "hangman_code.start_game.choose_word",

@@ -1,5 +1,7 @@
 import random
 
+from pathlib import Path
+
 #By JF:
 
 
@@ -12,17 +14,18 @@ def parse_words(words_file):
         return words_list
 
 
-def choose_word(available_words_list):
+def choose_word():
+        words_file = Path(__file__).parent / "words.txt"
+        available_words_list = parse_words(words_file)
         number_of_words_in_list = len(available_words_list)
         chosen_word_position = random.randint(1, number_of_words_in_list) - 1
         chosen_word = available_words_list[chosen_word_position]
-        available_words_list.remove(chosen_word)
-        chosen_word = chosen_word.strip().lower()
+        chosen_word = chosen_word.upper()
+        #available_words_list.remove(chosen_word)
+        #chosen_word = chosen_word.strip().lower()
+        #chosen_word = [char for char in chosen_word]
 
-
-        chosen_word = [char for char in chosen_word]
-
-        return (chosen_word, available_words_list)
+        return (chosen_word)
 
 
 #Examples of how to use the above:
@@ -45,3 +48,6 @@ My Python/Hangman/hangman_words_files/words.txt")"""
 #     print(unused_words_list)
 
 # print("End of session, as all words used.")
+
+
+
