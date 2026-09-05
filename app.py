@@ -37,7 +37,7 @@ def guess():
     game = Game(
         word=session["game"]["word"],
         used_letters=session["game"]["used_letters"],
-        letters_remaining=session["game"]["letters_remaining"]
+        #letters_remaining=session["game"]["letters_remaining"]
     )
     
     

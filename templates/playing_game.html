@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
         <h1>LOCKLEAZE CODING CLUB HANGMAN GAME</h1> 
-        <h2>"Make Me Pretty. I want to be stylish"</h2><br>
         
   <body>
 
@@ -9,40 +8,17 @@
         <button type="submit" id="reset">RESET</button>
     </form>
     
-    <p>Name</p>
-    <p id="game_name">{{ game["game_name"] }}</p>
-
-    {% if game["current_game_status"] == 0 %}
-      <form action="{{ url_for('name_game') }}" method="post">
-          <p><input type="text" name="game_name" /></p>
-          <button type="submit" id="submit_name">GO!</button>
-          <p id="game_status">{{ game["current_game_status"]}}</p>
-      </form>
-    {% endif %}
-    
-    {% if game["current_game_status"] != 0 %}
-
-    <form action="{{ url_for('show_line') }}" method="post">
-        <button type="submit" id="show_line">SHOW LINE</button>
-    </form>
-
-    <p id="message">this is where message goes on the screen:  {{ game["message"] }}</p>
-    <p id="template">Accepted letters: {{ game["accepted_letters"] }}</p>
-    <p id="template">used letters: {{ game["used_letters"] }}</p>
-    
     <p id="game_status">GAME STATUS: {{ game["status"] }}</p>
-    <p id="score">Word: {{ game["word"] }}</p>
-    <p>GUESS THE WORD</p>
-          <form action="{{ url_for('guess') }}" method="post">
-          <p><input type="text" name="guess_the_word" /></p>
-          <button type="submit" id="submit_word_attempt">GO!</button>
-          <p id="word_attempt">{{ game["word_attempt"]}}</p>
-      </form>
-   <p>
-     <!-- One form/button per letter -->
+    <p id="word">Word: {{ game["word"] }}</p>
+    <p id="word_template">Guessed: {{ game["word_template"] }}</p>
+    
+<!-- 
+Letter buttons for making guesses
+ One form/button per letter -->
+
 <form action="{{ url_for('guess') }}" method="post">
   {% for letter in game.accepted_letters %}
-<button name="letter" value="{{ letter }}" {% if letter in game["game.used_letters"] %}disabled{% endif %}>
+<button name="letter" value="{{ letter }}" {% if letter in game["used_letters"] %}disabled{% endif %}>
     {{ letter }}
 </button>
   {% endfor %}
@@ -51,8 +27,6 @@
    </p>
 
     <canvas id="gallows" width="400" height="400" style="border:1px solid grey"></canvas>
-
-  {% endif %}
 
 <p id="displayOption" hidden>{{ game["display_option"] }}</p>
 
@@ -95,8 +69,6 @@
     ctx.lineTo(200, 0);
     ctx.stroke();
   }
-
-  
 
    // Only draw this line if bit 3 (4) is set
   
@@ -157,8 +129,6 @@
     ctx.stroke();
   }
 </script>
-
-
 
   </body>
 </html>
